@@ -17,12 +17,3 @@ mindex = dot
 class Dottable p g f <= Metric p g f | p g -> f where
   mtabulate :: forall a. Semiring a => (g a -> f a) -> p a
   
-  {-
-instance Dottable0 a b c, Dottable p g f => Dottable (p a) (g b) (f c) where
-  dot0 =
-  -} 
--- p (p' a)
-{-
-instance dotCompose :: (Dottable p g f, Dottable p' g' f') => Dottable (Compose p p') (Compose g g') (Compose f f') where
-  dot (Compose ppa) (Compose gga) = Compose (dot ppa gga)
--}
