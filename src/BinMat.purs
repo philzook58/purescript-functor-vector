@@ -6,6 +6,8 @@ import BinVec
 import Data.Functor.Compose
 import Dottable
 import Data.Tuple
+import Semiring1
+import DenseKron
 
 data M2 a = M2 a a a a
 
@@ -20,10 +22,17 @@ type M512 a = M2 (M256 a)
 type M1024 a = M2 (M512 a)
 type M2048 a = M2 (M1024 a)
 
+type M4' a = CKron M2 M2 a
+type M8' a = CKron M2 (CKron M2 M2) a
 
 instance functorM2 :: Functor M2 where
    map f (M2 x y z w) = M2 (f x) (f y) (f z) (f w)
-
+{-
+instance foldableM2 :: Foldable M2 where
+   foldMap f (M2 a b c d) = (f a) <> (f b) <> (f c) <> (f d)
+   foldl = foldlDefault
+   foldr = foldrDefault
+-}
 instance representableM2 :: Representable M2 (Tuple Boolean Boolean) where
    tabulate f = M2 (f' false false) (f' false true) (f' true false) (f' true true) where f' = curry f
    index (M2 x y z w) (Tuple row col) = if row then
@@ -50,5 +59,46 @@ instance divisionRingM2 :: (DivisionRing a) => DivisionRing (M2 a) where
                                                                             m = recip (a - b * dinv * c)
                                                                             dinv = recip d
 
-instance dotma :: (Semiring a , Dottable m a a) => Dottable (M2 m) (V2 a) (V2 a) where
+instance dotma :: (Semiring a, Semiring m,  Dottable m a a) => Dottable (M2 m) (V2 a) (V2 a) where
   dot (M2 a b c d) (V2 x y) = V2 ((dot a x) + (dot b y)) ((dot c x) + (dot d y))
+{-
+instance dot1ma :: Dottable1 M2 V2 V2 where
+  dot1 (M2 a b c d) (V2 x y) = V2 (a * x + b * y) (c * x + d * y)
+-}
+
+instance dotmvv :: (Semiring c, Dottable a b c) => Dottable (M2 a) (V2 b) (V2 c) where
+  dot (M2 a b c d) (V2 x y) = V2 ((dot a x) + (dot b y)) ((dot c x) + (dot d y))
+
+instance dotmmm :: (Semiring c, Dottable a b c) => Dottable (M2 a) (M2 b) (M2 c) where
+  dot (M2 x y z w) (M2 a b c d) = M2 ((dot x a) + (dot y c)) ((dot x b) + (dot y d)) ((dot z a) + (dot w c)) ((dot z b) + (dot w d))
+{-
+instance dotmmm :: Dottable1 M2 M2 M2 where
+  dot1 = mul1
+-}
+instance semirRing1M2 :: Semiring1 M2 where
+  add1 = add
+  zero1 = zero
+  mul1 = mul
+  one1 = one
+{-
+instance metricMVV :: Metric M2 V2 V2 where
+  mtabulate f = M2 a b c d where
+                           V2 a c = f (V2 one zero)
+                           V2 b d = f (V2 zero one)
+-}
+-- little endian K matrix. Maybe
+mK :: forall a. Ring a => M2 a    -- forall f. Functor f => Semiring (f Number) => M2 (f Number)
+mK = M2 ntwo one one ntwo where
+             				ntwo = zero - one - one -- map (_ * -2.0) one
+
+mK'' :: Int -> Int -> Int
+mK'' i j | i == j - 1 = -1
+mK'' i j | i == j + 1 = -1
+mK'' i j | i == j = 2
+mK'' _ _ = 0
+
+mK' :: M8' Int
+mK' = fillFromZIndex mK''
+
+
+

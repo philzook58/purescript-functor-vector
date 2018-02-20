@@ -18,6 +18,11 @@ test2 = M2 1.23 23.3 2.2 3.4
 
 test3 = M2 (test2 + test2) (test2 * test2) test2 (test2 * test2+test2)
 
+top n = "type C" <> show (n+1)  <> " f a = " <> go n <> " a\n"
+go 0 = "f"
+go n = "(CKron f " <> go (n-1) <> ")"
+
+
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
   log "You should add some tests."
@@ -27,5 +32,5 @@ main = do
   log $ show $ (recip test3) * test3
   log $ foldMap (\n -> "type V" <> show (2*n) <> " a = V2 (V" <> show n <> " a)") $ map (\n -> pow 2 n) (1 .. 10)
   log $ foldMap (\n -> "type M" <> show (2*n) <> " a = M2 (M" <> show n <> " a)") $ map (\n -> pow 2 n) (1 .. 10)
-
+  log $ foldMap top $ (1 .. 10)
 
