@@ -4,6 +4,7 @@ import Prelude
 import Data.Identity
 import Control.Apply
 
+{-
 class Semiring1 f where
    add1 :: forall a. Semiring a => f a -> f a -> f a 
    zero1 :: forall a. Semiring a => f a
@@ -26,6 +27,7 @@ class Semiring1 f <= Ring1 f where
 class Ring1 f <= DivisionRing1 f where
    recip1 :: forall a. DivisionRing a => f a -> f a
 
+-}
 
 -- direct extension of semiring. Internally use this, but probably externally can use ordinayr
 -- semiring?

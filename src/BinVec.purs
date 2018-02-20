@@ -69,12 +69,13 @@ instance v2Semiring :: (Semiring a) => Semiring (V2 a) where
 instance ringV2 :: (Ring a) => Ring (V2 a) where
    sub (V2 x y) (V2 a b) = V2 (x-a) (y-b)
 
+{-
 instance semiring1 :: Semiring1 V2 where
   add1 = add
   zero1 = zero
   mul1 = mul
   one1 = one
-
+-}
 {-
 instance dottableV2 :: Dottable1 V2 V2 Identity where
   dot1 (V2 x y) (V2 a b) = Identity $ (dot x a) + (dot y b) 

@@ -87,6 +87,7 @@ instance dotmmm :: (Semiring c, Dottable a b c) => Dottable (M2 a) (M2 b) (M2 c)
 instance dotmmm :: Dottable1 M2 M2 M2 where
   dot1 = mul1
 -}
+{-
 instance semirRing1M2 :: Semiring1 M2 where
   add1 = add
   zero1 = zero
@@ -98,7 +99,7 @@ instance ring1M2 :: Ring1 M2 where
 
 instance divisionring1M2 :: DivisionRing1 M2 where
   recip1 = recip
-
+-}
 {-
 instance metricMVV :: Metric M2 V2 V2 where
   mtabulate f = M2 a b c d where

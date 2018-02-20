@@ -25,12 +25,15 @@ instance newtypeDot :: (Newtype p a, Newtype g b, Newtype f c, Dottable a b c) =
 instance dottableSemiring :: Semiring a => Dottable a a a where
   dot = mul
 -}
+{-
 class Dottable1 p g f | p g -> f where
   --dot1 :: forall a. Semiring a => p a -> (g a -> f a)
   dot1 :: forall a b c. Dottable a b c => p a -> (g b -> f c)
 
 instance compDot :: (Dottable1 p g f, Dottable p' g' f') => Dottable (p p') (g g') (f f') where
   dot = dot1
+  -}
+
   -- dot1 :: forall a b c. Additive c => Dottable a b c => p a -> (g b -> f c)
 {-
 
@@ -42,11 +45,12 @@ instance compDot :: (Dottable1 p g f, Dottable p' g' f') => Dottable (p p') (g g
 instance dottableSemiring1 :: Semiring1 a => Dottable1 a a a where
   dot1 = mul1
 -}
+{-
 mindex = dot1
 
 class Dottable1 p g f <= Metric p g f | p g -> f where
   mtabulate :: forall a. Semiring a => (g a -> f a) -> p a
-
+-}
 
 --instance Dottable1 p g f, Dottable p' g' f' => Dottable 
 
