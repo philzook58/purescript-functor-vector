@@ -33,4 +33,8 @@ main = do
   log $ foldMap (\n -> "type V" <> show (2*n) <> " a = V2 (V" <> show n <> " a)") $ map (\n -> pow 2 n) (1 .. 10)
   log $ foldMap (\n -> "type M" <> show (2*n) <> " a = M2 (M" <> show n <> " a)") $ map (\n -> pow 2 n) (1 .. 10)
   log $ foldMap top $ (1 .. 10)
+  log $ foldMap (\n -> "type V" <> show ((pow 2 n)) <> " a = C" <> show n <> " V2 a\n") $ (1 .. 10)
+  log $ foldMap (\n -> "type M" <> show ((pow 2 n)) <> " a = C" <> show n <> " M2 a\n") $ (1 .. 10)
+  log $ show $ mK' * mK'
+  log $ show $ recip mK'
 

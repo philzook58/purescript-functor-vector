@@ -12,6 +12,7 @@ import Data.Monoid
 
 data V2 a = V2 a a
 
+{-
 type V4 a = V2 (V2 a)
 type V8 a = V2 (V4 a)
 type V16 a = V2 (V8 a)
@@ -22,12 +23,24 @@ type V256 a = V2 (V128 a)
 type V512 a = V2 (V256 a)
 type V1024 a = V2 (V512 a)
 type V2048 a = V2 (V1024 a)
+-}
 
-type V4' a = CKron V2 (CKron V2 V2) a
+type V4 a = C2 V2 a
+type V8 a = C3 V2 a
+type V16 a = C4 V2 a
+type V32 a = C5 V2 a
+type V64 a = C6 V2 a
+type V128 a = C7 V2 a
+type V256 a = C8 V2 a
+type V512 a = C9 V2 a
+type V1024 a = C10 V2 a
+
+
+--type V4' a = CKron V2 (CKron V2 V2) a
 -- The thing that makes V4'' not so bad is the newtype deriving
 newtype V4'' a = V4'' (CKron V2 V2 a)
 
-type V4''' a = C2 V2 a
+--type V4''' a = C2 V2 a
 
 instance functorV2 :: Functor V2 where
    map f (V2 x y) = V2 (f x) (f y)

@@ -28,11 +28,25 @@ type C9 f a = (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CK
 type C10 f a = (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f f))))))))) a
 type C11 f a = (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f f)))))))))) a
 
+-- is this totally pointless with the next instance?
 instance kronSemiring :: (Semiring (g a), Semiring1 f) => Semiring (CKron f g a) where
    add (CKron x) (CKron y) = CKron $ add1 x y
    zero = CKron zero1
    mul (CKron x) (CKron y) = CKron $ mul1 x y
    one = CKron one1
+
+instance kronSemiring' :: Semiring (f (g a)) => Semiring (CKron f g a) where
+   add (CKron x) (CKron y) = CKron $ add x y
+   zero = CKron zero
+   mul (CKron x) (CKron y) = CKron $ mul x y
+   one = CKron one
+
+instance kronRing :: (Ring (g a), Ring1 f) => Ring (CKron f g a) where
+   sub (CKron x) (CKron y) = CKron $ sub1 x y
+
+instance kronDivisionRing :: (DivisionRing (g a), DivisionRing1 f) => DivisionRing (CKron f g a) where
+   recip (CKron x) = CKron $ recip1 x
+
 
 -- Similarly for Ring and DivisionRing
 
@@ -52,18 +66,30 @@ instance applyCKron :: (Apply f, Apply g) => Apply (CKron f g) where
 instance applicativeCKron :: (Applicative f, Applicative g) => Applicative (CKron f g) where
   pure = CKron <<< pure <<< pure
 
+-- quesitonable
+{-
 instance composeSemiring1 :: (Semiring1 g, Applicative f) => Semiring1 (CKron f g) where
   add1 (CKron x) (CKron y) = CKron (add1 <$> x <*> y)
   zero1 = CKron $ pure zero1
   mul1 (CKron x) (CKron y) = CKron (mul1 <$> x <*> y)
   one1 = CKron $ pure one1
+-}
+
 
 
 
 {-
+instance dot1ma :: (Applicative p, Applicative g, Applicative f, Dottable1 p' g' f') => Dottable1 (CKron p p') (CKron g g') (CKron f f') where
+  dot1 (CKron x) (CKron y) = CKron $ dot1 <$> x <*> y
+-}
+
+instance dotma :: Dottable (p (p' a)) (g (g' b)) (f (f' c)) => Dottable (CKron p p' a) (CKron g g' b) (CKron f f' c) where
+  dot (CKron x) (CKron y) = CKron $ dot x y
 instance dot1ma :: (Dottable1 p g f, Dottable1 p' g' f') => Dottable1 (CKron p p') (CKron g g') (CKron f f') where
   dot1 (CKron x) (CKron y) = CKron $ dot1 x y
--}
+
+
+
 
 instance foldableCompose :: (Foldable f, Foldable g) => Foldable (CKron f g) where
   foldr f i (CKron fga) = foldr (flip (foldr f)) i fga

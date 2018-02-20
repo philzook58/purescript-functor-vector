@@ -10,7 +10,7 @@ import Semiring1
 import DenseKron
 
 data M2 a = M2 a a a a
-
+{-
 type M4 a = M2 (M2 a)
 type M8 a = M2 (M4 a)
 type M16 a = M2 (M8 a)
@@ -24,6 +24,18 @@ type M2048 a = M2 (M1024 a)
 
 type M4' a = CKron M2 M2 a
 type M8' a = CKron M2 (CKron M2 M2) a
+-}
+
+
+type M4 a = C2 M2 a
+type M8 a = C3 M2 a
+type M16 a = C4 M2 a
+type M32 a = C5 M2 a
+type M64 a = C6 M2 a
+type M128 a = C7 M2 a
+type M256 a = C8 M2 a
+type M512 a = C9 M2 a
+type M1024 a = C10 M2 a
 
 instance functorM2 :: Functor M2 where
    map f (M2 x y z w) = M2 (f x) (f y) (f z) (f w)
@@ -80,6 +92,13 @@ instance semirRing1M2 :: Semiring1 M2 where
   zero1 = zero
   mul1 = mul
   one1 = one
+
+instance ring1M2 :: Ring1 M2 where
+  sub1 = sub
+
+instance divisionring1M2 :: DivisionRing1 M2 where
+  recip1 = recip
+
 {-
 instance metricMVV :: Metric M2 V2 V2 where
   mtabulate f = M2 a b c d where
@@ -91,13 +110,13 @@ mK :: forall a. Ring a => M2 a    -- forall f. Functor f => Semiring (f Number) 
 mK = M2 ntwo one one ntwo where
              				ntwo = zero - one - one -- map (_ * -2.0) one
 
-mK'' :: Int -> Int -> Int
-mK'' i j | i == j - 1 = -1
-mK'' i j | i == j + 1 = -1
-mK'' i j | i == j = 2
-mK'' _ _ = 0
+mK'' :: Int -> Int -> Number
+mK'' i j | i == j - 1 = -1.0
+mK'' i j | i == j + 1 = -1.0
+mK'' i j | i == j = 2.0
+mK'' _ _ = 0.0
 
-mK' :: M8' Int
+mK' :: M8 Number
 mK' = fillFromZIndex mK''
 
 
