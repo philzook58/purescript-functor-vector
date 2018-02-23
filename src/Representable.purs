@@ -19,6 +19,8 @@ instance repCompose :: (Representable f a, Representable g b) => Representable (
    tabulate = Compose <<< tabulate <<< map tabulate <<< curry
    index (Compose fg) (Tuple i j) = index (index fg i) j
 
+
+
 -- Similarly for Product -> Either a b
 
 fillFromIndex :: forall a f b. BoundedEnum a => Representable f a => (Int -> b) -> f b  

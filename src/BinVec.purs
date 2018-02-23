@@ -9,6 +9,7 @@ import Data.Identity
 import Dottable
 import Data.Foldable
 import Data.Monoid
+import Control.Apply
 
 data V2 a = V2 a a
 
@@ -50,6 +51,20 @@ instance foldableV2 :: Foldable V2 where
    foldl f b (V2 x y) = f (f b x) y
    foldr f b (V2 x y) = f x (f y b)
 
+
+
+instance applyV2 :: Apply V2 where
+  apply (V2 f g) (V2 a b) = V2 (f a) (g b)
+
+instance applicativeV2 :: Applicative  V2 where
+  pure x = V2 x x
+
+instance monadV2 :: Bind V2 where
+  bind z f = join' $ map f z where
+                          join' (V2 (V2 a _) (V2 _ b)) = V2 a b
+
+
+
 toArray :: forall f a. Applicative f => Monoid (f a) => V2 a -> f a
 toArray = foldMap pure 
 
@@ -61,13 +76,16 @@ instance showV2 :: Show a => Show (V2 a) where
    show (V2 x y) = "V2 " <> show x <> " " <> show y
 
 instance v2Semiring :: (Semiring a) => Semiring (V2 a) where
-   add (V2 x y) (V2 a b) = V2 (add x a) (add y b)
-   zero = V2 zero zero
-   mul (V2 x y) (V2 a b) = V2 (x * a) (y * b)
-   one = V2 one one
+   --add (V2 x y) (V2 a b) = V2 (add x a) (add y b)
+   add = lift2 add
+   zero = pure zero -- V2 zero zero
+   --mul (V2 x y) (V2 a b) = V2 (x * a) (y * b)
+   mul = lift2 mul
+   one = pure one -- V2 one one
 
 instance ringV2 :: (Ring a) => Ring (V2 a) where
-   sub (V2 x y) (V2 a b) = V2 (x-a) (y-b)
+   --sub (V2 x y) (V2 a b) = V2 (x-a) (y-b)
+   sub = lift2 sub
 
 {-
 instance semiring1 :: Semiring1 V2 where

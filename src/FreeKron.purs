@@ -4,6 +4,9 @@ import Data.CatList
 import DirectSum
 import Semiring1 
 import Data.Monoid (mempty)
+import Dual
+import Data.Newtype
+import Dottable
 
 newtype FKron f g a = FKron (CatList (DSum f g a))
 {-
@@ -21,3 +24,16 @@ instance semiringKron :: (Semiring (f a), Semiring (g a)) => Semiring (FKron f g
 
 -- No instance for Division 
 -- maybe an instance for 
+
+newtype Expansion f a = Expansion (FKron f (Dual f) a)
+
+
+{-
+
+instance expansionsemiring :: (Semiring a, Semiring (f a)) => Semiring (Expansion f a) where
+  add (Expansion x) (Expansion y) = Expansion (x + y)
+  zero = Expansion $ zero 
+  mul (Expansion (FKron x)) (Expansion (FKron y)) = Expansion $ FKron $ helper <$> x <*> y where
+  											helper (DSum a b) (DSum c d) = DSum a (map (\x -> unwrap $ x * (dot b c)) d)
+  one = FKron $ pure one -- Not correct
+  -} 

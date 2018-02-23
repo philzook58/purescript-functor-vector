@@ -4,6 +4,7 @@ import Prelude
 import Dottable
 import Data.Identity
 
+
 newtype Dual f a = Dual (f a -> a)
 --newtype Dual' f c a = Dual' (f a -> c)
 -- f a -> a
@@ -20,6 +21,9 @@ instance semiringdual :: Semiring a => Semiring (Dual f a) where
   zero = Dual $ const zero
   mul (Dual x) (Dual y) = Dual $ mul <$> x <*> y
   one = Dual $ const one 
-
-
+{-
+instance dualDot :: Dottable (f a) (Dual f a) (FKron f (Dual f) a) where
+   dot (Dual f) x = Identity $ f x
+-}
 --ddot (Dual f) x = f x
+

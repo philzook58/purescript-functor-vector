@@ -21,6 +21,8 @@ instance newtypeDot :: (Newtype p a, Newtype g b, Newtype f c, Dottable a b c) =
 								y' = (unwrap y)
 
 
+
+
 {-
 instance dottableSemiring :: Semiring a => Dottable a a a where
   dot = mul

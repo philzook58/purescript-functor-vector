@@ -41,6 +41,7 @@ instance semirRingFree :: Semiring a => Semiring (ZeroOne a) where
 
 	one = OneZO
 
+
 -- instance Repsentable Void for ZeroOne
 -- ExampleStack C4 (CKron ZeroOne V2) Number
 -- C4 (Improve V2) Number
