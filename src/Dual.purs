@@ -27,3 +27,8 @@ instance dualDot :: Dottable (f a) (Dual f a) (FKron f (Dual f) a) where
 -}
 --ddot (Dual f) x = f x
 
+-- Dual f (f a) = CKron (Dual f) f a
+-- f f a -> f a 
+-- which is signature of join
+-- which comes from the indexing adjunction?
+-- make index module and adjunction

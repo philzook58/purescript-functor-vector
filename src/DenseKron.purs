@@ -7,6 +7,7 @@ import Semiring1
 import Data.Identity
 import Data.Foldable
 import Dottable
+import HFunctor
 --import Data.Functor.Compose
 
 -- This module is largely identical to Compose, but due to orphan instance restrictions, we 
@@ -15,8 +16,8 @@ import Dottable
 --alternative approahc. Use Compose' which directly extends Compose
 newtype CKron f g a = CKron (f (g a))
 
-type C0 f a = a -- Identity a?
-type C1 f a = f a
+type C0 f a = a -- Identity a? -- CKron Ident
+type C1 f a = f a -- CKron Identity f a
 type C2 f a = (CKron f f) a
 type C3 f a = (CKron f (CKron f f)) a
 type C4 f a = (CKron f (CKron f (CKron f f))) a
@@ -27,6 +28,12 @@ type C8 f a = (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f f))
 type C9 f a = (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f f)))))))) a
 type C10 f a = (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f f))))))))) a
 type C11 f a = (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f (CKron f f)))))))))) a
+
+
+newtype C2' f a = C2' (C2 f a)
+
+instance c2hfunctor :: HFunctor C2' where
+   hmap f (C2' (CKron x)) = C2' $ CKron $ map f (f x)
 
 -- is this totally pointless with the next instance?
 {-

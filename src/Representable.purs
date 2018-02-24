@@ -5,6 +5,10 @@ import Data.Functor.Compose
 import Data.Tuple
 import Data.Enum
 import Data.Int.Bits
+import Partial.Unsafe (unsafePartial)
+import Data.Maybe (fromJust)
+import Data.Array (range)
+import Data.Newtype
 
 class Functor f <= Representable f a | f -> a where
    tabulate :: forall b. (a -> b) -> f b
@@ -23,8 +27,14 @@ instance repCompose :: (Representable f a, Representable g b) => Representable (
 
 -- Similarly for Product -> Either a b
 
+fillRange :: forall f a. BoundedEnum a => Representable f a => f Int
+fillRange = tabulate (\x -> (fromEnum x))
+
 fillFromIndex :: forall a f b. BoundedEnum a => Representable f a => (Int -> b) -> f b  
 fillFromIndex f = tabulate (f <<< fromEnum)
+
+basis :: forall a. BoundedEnum a => Array a
+basis = unsafePartial $ map (fromJust <<< toEnum) (range 0 $ unwrap (cardinality :: Cardinality a))
 
 
 fillFromZIndex :: forall a f b. BoundedEnum a => Representable f a => (Int -> Int -> b) -> f b  
