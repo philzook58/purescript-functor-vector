@@ -1,7 +1,6 @@
 # purescript-functor-vector
 Vector operations heavily based in Functor composition
 
-
 Representable Functors are container types that are basically the same as functions from some index type to the contained type. They are often big product types. The index type is in a sense the "logarithm" of the Functor type. Functor Composition leads to products of indices, and functor product leads to sum types of indices.
 
 In the sense that vectors are objects that you can give an index and they return the value, this is a good match for vector-like types. This supplies a useful interface to fill out vectors given a function from the index type to the value you want to hold.
@@ -30,7 +29,18 @@ The Free Kronecker product is an unexpanded dense kronecker product. This can be
 Adjacency Matrices using the MaxPlus semiring can be used to solve minimum path problems.
 
 
-
+Things to do:
+* Pretty Printing
+* Matrix Factorizations
+* Array-based base case (ndarray bindings?)
+* Index.purs
+* Factored objects
+* Heterogenous blocks
+* Continuous Spaces, Integration Routines
+* Power Series algorithms
+* Diagram example
+* Fock
+* 
 
 
 
