@@ -1,7 +1,7 @@
 module FunVec where 
 
 import Prelude
-import Representable 
+import Data.Functor.Representable (class Representable)
 
 newtype FunVec a b = FunVec (a -> b)
 

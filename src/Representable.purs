@@ -1,14 +1,14 @@
-module Representable where
+module Data.Functor.Representable where
 
 import Prelude
-import Data.Functor.Compose
-import Data.Tuple
-import Data.Enum
-import Data.Int.Bits
+import Data.Functor.Compose (Compose(..))
+import Data.Tuple (Tuple(..), curry, uncurry)
+import Data.Enum (class BoundedEnum, Cardinality, cardinality, fromEnum, toEnum)
+import Data.Int.Bits (shr)
 import Partial.Unsafe (unsafePartial)
 import Data.Maybe (fromJust)
 import Data.Array (range)
-import Data.Newtype
+import Data.Newtype (unwrap)
 
 class Functor f <= Representable f a | f -> a where
    tabulate :: forall b. (a -> b) -> f b
@@ -36,7 +36,7 @@ fillFromIndex f = tabulate (f <<< fromEnum)
 basis :: forall a. BoundedEnum a => Array a
 basis = unsafePartial $ map (fromJust <<< toEnum) (range 0 $ unwrap (cardinality :: Cardinality a))
 
-
+-- Use this to fill iterated M2 instances
 fillFromZIndex :: forall a f b. BoundedEnum a => Representable f a => (Int -> Int -> b) -> f b  
 fillFromZIndex f = tabulate (uncurry f <<< unzorder <<< fromEnum)
 
@@ -50,12 +50,4 @@ unzorder z = Tuple x y where
 		                   Tuple x' y' = unzorder (shr z 2)
 		                   x = (mod z 2) + x' * 2
 		                   y = (mod (shr z 1) 2) + y' * 2
-		                   {- Maybe want this for the tail recursive version
-go z 16 where
-			             go z 0 = Tuple (mod z 2) (mod (shr z 1) 2)
-			             go 0 n = Tuple 0 0
-			             go z n = Tuple x y where
-				                   Tuple x' y' = go (shr z 2) (n-1)
-				                   x = (mod z 2) + x' * 2
-				                   y = (mod z 4) + y' * 2
-				                   -}
+

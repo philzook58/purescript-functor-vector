@@ -1,13 +1,13 @@
 module FreeSemiring where
 
 import Prelude
-import Control.Monad.Free
+import Control.Monad.Free (Free)
 
 data SemiringF a = AddF a a | ZeroF | MulF a a | OneF
 
 newtype FSR a = FSR (Free SemiringF a)
 {-
-instance semirRingFree :: Semiring (FSR a) where
+instance semiringFree :: Semiring (FSR a) where
    add (FSR x) (FSR y) = FSR $ liftF (AddF x y)
    zero = FSR $ liftF ZeroF
    mul (FSR x) (FSR y) = FSR $ liftF (MulF x y)

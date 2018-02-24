@@ -1,7 +1,7 @@
-module HFunctor where
+module Data.HFunctor where
 
 import Prelude
-import Data.Functor.Compose
+import Data.Functor.Compose (Compose(..))
 
 -- useful for changing out the functor. Augmenting it with monads, FreeSemiring etc.
 class HFunctor p where
@@ -10,12 +10,13 @@ class HFunctor p where
 instance hfunctorcompsoe :: Functor f => HFunctor (Compose f) where
   hmap f (Compose x) = Compose $ map f x
 
-{-
+{- Not sure why this doesn't compile
 newtype Zerosy f a = Zerosy a
 
 instance serozyHfunctor :: HFunctor Zerosy where
   hmap _ (Zerosy x) = Zerosy $ x
 -}
+
 newtype Onesy f a = Onesy (f a)
 
 instance hfunctortonesy :: HFunctor Onesy where
