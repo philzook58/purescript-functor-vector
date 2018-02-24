@@ -2,6 +2,10 @@ module Data.Dottable where
 
 import Prelude
 import Data.Exists
+import Data.Functor.Representable (basis)
+import Data.Foldable (sum)
+import Data.Enum
+import Control.Apply (lift2)
 
 class Dottable p g f | p g -> f where
   dot :: p -> g -> f
@@ -25,6 +29,9 @@ instance newtypeDot :: (Newtype p a, Newtype g b, Newtype f c, Dottable a b c) =
 								y' = (unwrap y)
 -}
 
-instance dottableArrow :: Dottable (b -> c) b c where
+instance dottableArrowApply :: Dottable (b -> c) b c where
   dot f x = f x
+
+instance dottableArrowArrow :: (BoundedEnum b, Semiring c) => Dottable (b -> c) (b -> c) c where
+  dot f g = sum $ lift2 mul (map f basis) (map g basis)
 

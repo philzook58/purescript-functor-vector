@@ -2,6 +2,8 @@ module FreeSemiring where
 
 import Prelude
 import Control.Monad.Free (Free)
+import Data.Functor.Representable 
+import Data.DenseKron
 
 data SemiringF a = AddF a a | ZeroF | MulF a a | OneF
 
@@ -45,3 +47,11 @@ instance semirRingFree :: Semiring a => Semiring (ZeroOne a) where
 -- instance Repsentable Void for ZeroOne
 -- ExampleStack C4 (CKron ZeroOne V2) Number
 -- C4 (Improve V2) Number
+{-
+instance representableZeroOne :: (Semiring a, Representable f a) => Representable (DKron ZeroOne f) a where
+  tabulate f = PureZO $ tabulate f 
+  index (ZeroZO) = const zero
+  index (OneZO) = const one
+  index (PureZO x) = index x
+
+  -} 

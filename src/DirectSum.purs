@@ -1,6 +1,7 @@
 module Data.DirectSum where
 
 import Prelude
+import Data.Dottable (class Dottable, dot)
 
 
 data DSum f g a = DSum (f a) (g a)
@@ -20,3 +21,5 @@ instance ringDSum :: (Ring (f a), Ring (g a)) => Ring (DSum f g a) where
 instance divisibleRingDSum :: (DivisionRing (f a), DivisionRing (g a)) => DivisionRing (DSum f g a) where -- Direct sum of matrices
    recip (DSum a b) = DSum (recip a) (recip b)
 
+instance dottableDSum :: (Dottable (f a) (f' b) (f'' c), Dottable (g a) (g' b) (g'' c)) => Dottable (DSum f g a) (DSum f' g' b) (DSum f'' g'' c) where
+   dot (DSum x y) (DSum a b) = DSum (dot x a) (dot y b)
