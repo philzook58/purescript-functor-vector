@@ -1,6 +1,10 @@
 {
   "name": "purescript-functor-vector",
   "homepage": "https://github.com/philzook58/purescript-functor-vector",
+  "repository": {                                                           
+      "type": "git",                                                          
+      "url": "https://github.com/philzook58/purescript-functor-vector.git"    
+    },
   "authors": [
     "Philip Zucker"
   ],
