@@ -12,6 +12,9 @@ import Data.Array
 import Laplace
 import Data.Functor.Representable
 import Data.DenseKron
+import Data.Pretty
+import Text.Pretty
+import Data.Complex
 
 
 test1 :: M4 Number
@@ -52,6 +55,11 @@ main = do
   log $ show $ recip bD
   logs $ sigmax * sigmay - map (i * _) sigmaz 
   logs $ dkron sigmaz sigmaz
-  
+  log $ render $ pshow fD
+  log $ render $ pshow (fillRange :: V8 Int) 
+  log $ render $ pshow (dkron sigmaz sigmaz) 
+  log $ render $ pshow (recip test3)
+
+
 
 

@@ -5,9 +5,9 @@ data Factored a b = Factored a b
 
 
 {-
-instance Dottable a c d, Dottable b d c => SemiRing (Factored a b)
-
+instance semiringFactored :: (Dottable a b c, Dottable b a d, Dottable d a d, Dottable d a d, Dottable d a d, Dottable d a d ) => SemiRing (Factored a b)
 -}
+
 
 -- this is all rather silly. basically you might as well convert to the function format, since that is all Dottable gives you
 {-
