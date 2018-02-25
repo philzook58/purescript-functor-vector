@@ -47,6 +47,8 @@ Things to do:
 * 3D objects. Sigh.
 * Random numbers and markov processes
 * examples folder
+* hfunctor instances for iterated Krons
+* Iterated FreeKron
 
 
 
