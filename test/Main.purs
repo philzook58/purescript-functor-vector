@@ -3,12 +3,16 @@ module Test.Main where
 import Prelude
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
-import BinVec
-import BinMat
-import Dottable
+import Data.BinVec
+import Data.BinMat
+import Data.Dottable
 import Data.Foldable
 import Data.Int
 import Data.Array
+import Laplace
+import Data.Functor.Representable
+import Data.DenseKron
+
 
 test1 :: M4 Number
 test1 = one
@@ -22,6 +26,7 @@ top n = "type C" <> show (n+1)  <> " f a = " <> go n <> " a\n"
 go 0 = "f"
 go n = "(CKron f " <> go (n-1) <> ")"
 
+logs = log <<< show
 
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
@@ -37,4 +42,16 @@ main = do
   log $ foldMap (\n -> "type M" <> show ((pow 2 n)) <> " a = C" <> show n <> " M2 a\n") $ (1 .. 10)
   log $ show $ mK' * mK'
   log $ show $ recip mK'
+  log $ show $ (fillRange :: V8 Int) 
+  log $ show $ (fillRange :: V8 Int) * (fillRange :: V8 Int)
+  log $ show $ map (\x -> x * x) (fillRange :: V8 Int)
+  log $ show $ fD
+  log $ show $ fD * bD
+  log $ show $ bD * fD
+  log $ show $ recip fD
+  log $ show $ recip bD
+  logs $ sigmax * sigmay - map (i * _) sigmaz 
+  logs $ dkron sigmaz sigmaz
+  
+
 

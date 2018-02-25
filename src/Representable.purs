@@ -28,7 +28,7 @@ instance repCompose :: (Representable f a, Representable g b) => Representable (
 -- Similarly for Product -> Either a b
 
 fillRange :: forall f a. BoundedEnum a => Representable f a => f Int
-fillRange = tabulate (\x -> (fromEnum x))
+fillRange = fillFromIndex id -- tabulate (\x -> (fromEnum x))
 
 fillFromIndex :: forall a f b. BoundedEnum a => Representable f a => (Int -> b) -> f b  
 fillFromIndex f = tabulate (f <<< fromEnum)

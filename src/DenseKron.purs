@@ -71,3 +71,6 @@ instance foldableDKron :: (Foldable f, Foldable g) => Foldable (DKron f g) where
 instance showDKron :: Show (f (g a)) => Show (DKron f g a) where
   show (DKron fga) = "(DKron " <> show fga <> ")"
 
+dkron :: forall f g a. Semiring a => Functor f => Functor g => f a -> g a -> DKron f g a
+dkron x y = DKron $ map (\a -> map (\b -> a * b) y) x
+

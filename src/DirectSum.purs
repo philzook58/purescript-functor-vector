@@ -9,6 +9,8 @@ data DSum f g a = DSum (f a) (g a)
 dswap :: forall f g a. DSum f g a -> DSum g f a
 dswap (DSum x y) = DSum y x
 
+dsum = DSum
+
 instance semiringDSum :: (Semiring (f a), Semiring (g a)) => Semiring (DSum f g a) where
    add (DSum x y) (DSum a b) = DSum (add x a) (add y b)
    zero = DSum zero zero

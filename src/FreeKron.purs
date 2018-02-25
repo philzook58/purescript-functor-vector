@@ -2,7 +2,7 @@ module Data.FreeKron where
 
 import Prelude 
 import Data.CatList (CatList)
-import Data.DirectSum (DSum)
+import Data.DirectSum (DSum(..))
 import Data.Monoid (mempty)
 import Data.Dottable (class Dottable, dot)
 
@@ -20,3 +20,6 @@ instance dottableFKron :: (Dottable (f a) (f' b) (f'' c), Dottable (g a) (g' b) 
    dot (FKron x) (FKron y) = FKron $ dot <$> x <*> y  
 
 
+fkron x y = FKron $ pure $ DSum x y
+
+-- densify :: FKron f g a -> DKron f g a

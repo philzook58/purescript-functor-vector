@@ -1,3 +1,5 @@
+module Factored where
+
 data Factored a b = Factored a b
 
 

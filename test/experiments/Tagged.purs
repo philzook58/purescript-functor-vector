@@ -4,7 +4,7 @@ import Prelude
 import Data.Int.Bits
 import Data.Int
 import Data.Enum
-import Representable
+import Data.Functor.Representable
 import Data.Newtype
 import Data.Maybe
 import Partial.Unsafe

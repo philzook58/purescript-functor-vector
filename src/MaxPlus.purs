@@ -1,4 +1,4 @@
-module MaxPlus where
+module Data.MaxPlus where
 
 import Prelude
 

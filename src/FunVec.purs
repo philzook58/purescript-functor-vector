@@ -1,4 +1,4 @@
-module FunVec where 
+module Data.FunVec where 
 
 import Prelude
 import Data.Functor.Representable (class Representable, basis)
@@ -23,7 +23,6 @@ instance functorFunVec :: Functor (FunVec a) where
 instance representableFunVec :: Representable (FunVec a) a where
   tabulate x = FunVec x 
   index (FunVec x) = x 
-
 
 instance dottableFunVecFunVec :: (BoundedEnum b, Semiring c) => Dottable (FunVec b c) (FunVec b c) c where
   dot (FunVec f) (FunVec g) = sum $ lift2 mul (map f basis) (map g basis)

@@ -1,4 +1,4 @@
-module FreeSemiring where
+module Data.FreeSemiring where
 
 import Prelude
 import Control.Monad.Free (Free)
