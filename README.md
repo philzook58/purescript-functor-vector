@@ -41,7 +41,7 @@ Things to do:
 * Heterogenous blocks
 * Continuous Spaces, Integration Routines
 * Power Series algorithms
-* Diagram example
+* Diagram example, 
 * Fock
 * Quadratic minimizer?
 * 3D objects. Sigh.

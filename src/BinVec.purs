@@ -8,6 +8,7 @@ import Data.Dottable (class Dottable, dot)
 import Data.Foldable (class Foldable, foldMap)
 import Data.Monoid (class Monoid)
 import Control.Apply (lift2)
+import Data.Traversable
 
 data V2 a = V2 a a
 
@@ -29,6 +30,11 @@ instance foldableV2 :: Foldable V2 where
    foldMap f (V2 x y) = (f x) <> (f y)
    foldl f b (V2 x y) = f (f b x) y
    foldr f b (V2 x y) = f x (f y b)
+
+instance traversableV2 :: Traversable V2 where
+   traverse f (V2 x y) = lift2 V2 (f x) (f y)
+   sequence = sequenceDefault
+
 
 instance applyV2 :: Apply V2 where
   apply (V2 f g) (V2 a b) = V2 (f a) (g b)

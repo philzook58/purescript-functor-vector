@@ -7,6 +7,8 @@ import Data.BinVec
 import Data.DenseKron
 import Data.Complex
 
+-- PShow using functor composition as horizontal
+-- and matrix multplication as vertical.
 
 space = empty 1 0
 

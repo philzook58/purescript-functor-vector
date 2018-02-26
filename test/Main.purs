@@ -15,6 +15,8 @@ import Data.DenseKron
 import Data.Pretty
 import Text.Pretty
 import Data.Complex
+import Data.H2
+
 
 
 test1 :: M4 Number
@@ -24,6 +26,8 @@ test2 :: M2 Number
 test2 = M2 1.23 23.3 2.2 3.4
 
 test3 = M2 (test2 + test2) (test2 * test2) test2 (test2 * test2+test2)
+
+test4 = H2 (V2 1 2)
 
 top n = "type C" <> show (n+1)  <> " f a = " <> go n <> " a\n"
 go 0 = "f"
@@ -59,6 +63,7 @@ main = do
   log $ render $ pshow (fillRange :: V8 Int) 
   log $ render $ pshow (dkron sigmaz sigmaz) 
   log $ render $ pshow (recip test3)
+  logs $ test4 + test4
 
 
 
