@@ -67,6 +67,6 @@ instance ringV2 :: (Ring a) => Ring (V2 a) where
    --sub (V2 x y) (V2 a b) = V2 (x-a) (y-b)
    sub = lift2 sub
 
-instance dottableV2 :: (Semiring c, Dottable a b c) => Dottable (V2 a) (V2 b) (Identity c) where
-  dot (V2 x y) (V2 a b) = Identity $ (dot x a) + (dot y b) 
+instance dottableV2 :: (Semiring c, Dottable a b c) => Dottable (V2 a) (V2 b) c where
+  dot (V2 x y) (V2 a b) = (dot x a) + (dot y b) 
 

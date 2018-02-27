@@ -13,6 +13,8 @@ import Data.Dottable
 
 space = empty 1 0
 
+
+-- can this also be implemeted as a fold?
 class PShow a where
   pshow :: a -> Doc
 
@@ -69,6 +71,34 @@ instance dottableDiagram :: Dottable a b c => Dottable (DiagramOp a) (DiagramOp 
 
 instance dottableDiagramOp :: Dottable a b c => Dottable (DiagramOp a) (Diagram b) (Diagram c) where
    dot (DiagramOp x a) (Diagram y b) = Diagram (atop x y) (dot a b)
+
+
+
+{-
+
+class TextPlot a where
+   textplot :: a -> Doc
+
+instance textplotV2 :: TextPlot a => TextPlot (V2 a) where
+   textplot (V2 x y) = beside (textplot x) (textplot y)
+
+instance textplotInt :: TextPlot Int where
+   textplot x = atop (text "o") (empty 1 x)
+-}
+-- don't need this either
+-- map (\n -> atop (text "o") (empty 1 x) empty 1 n)
+-- then foldMap the entire V2 structure
+
+-- likewise, I think conversion of V2 structure to Free V2 structure can be implemented with fold
+
+
+{-
+  -- don't need this.
+  foldr max -10000 works because DKron inherits foldable
+instance maxV2 :: Max a => Max (V2 a) where
+   textplot (V2 x y) = beside (textplot x) (textplot y)
+-}
+
 
 
 

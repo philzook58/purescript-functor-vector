@@ -7,6 +7,9 @@ import Data.CatList
 import Data.Dottable
 import Prelude
 import Data.Foldable
+import Math
+import Data.List
+import Data.Complex
 {-
 class QR a where
    qr :: a -> Tuple a a
@@ -58,3 +61,61 @@ recipH = id
 -- QR does not feel like a Vector Space notion. It feels like a matrix notion. It is a basis dependent decomposition. Depends on the columns, which are the image of
 -- the basis vector under the linear operation.
 -- that is one easy wayo to extract the columns. Use matrix on basis list.
+
+-- Householder relies on the current basis. It has an implciit subspace inclusion relation
+norm :: forall a. Dottable a a Number => a -> Number
+norm x = sqrt (dot x x)
+normalize :: forall f. Dottable (f Number) (f Number) Number => Functor f => f Number -> f Number
+normalize x = smult (recip (norm x)) x
+
+-- does not store R.
+orthogonalize :: List (V2 Number) -> List (V2 Number)
+orthogonalize Nil = Nil
+orthogonalize (x : xs) = u : orthogonalize xs' where
+                         u = normalize x
+                         xs' = map (\v -> v - (smult (dot v u) u)) xs
+
+
+-- Type classes to generate implicit matrices from vectors
+newtype Diag a = Diag a -- Diagonal of vector
+newtype Project a = Project a -- I - u uT
+
+
+newtype Reflect a = Reflect a -- I - 2 u uT
+newtype Circulant a = Circulant a -- via the fft
+newtype Toeplitz a = Toeplitz a -- The opposite diagonal filled out in a toeplitz manner
+
+
+
+class Haar a where
+   haar :: a -> a
+-- guarantees perfect balancing
+-- assumes the little endian ordering
+instance haarV2 :: (Haar a, Ring a) => Haar (V2 a) where   
+   haar (V2 a b) = V2 (a - b) (haar (a + b)) 
+
+instance haarNumber :: Haar Number where
+   haar = id
+{-
+  --The matrix that represents the haar transform. Could be useful if one uses the free semiring.
+  -- can be built by tabulating? de dotting. 
+instance haarM2 :: (Haar a, Semiring a) => HaarM (M2 a) where
+   haar = M2 one (zero - one) z z where
+                                  z = haar
+-}
+
+class FFT a where
+   fft :: a -> a 
+   -- or perhaps (a, a) can push up the twiddles. twiddle' = V2 twiddle (smult exp (i pi / N)  twiddle)
+{-
+instance fftV2 :: (FFT a, Semiring a) => FFT (V2 a) where
+   fft (V2 a b) = V2 (a' + twiddle * b') (a' - twiddle * b') where
+                                                            a' = fft a
+                                                            b' = fft b
+                                                            twiddle :: a
+                                                          twiddle = fillRange 
+-}
+
+instance fftComplex :: FFT (Complex Number) where
+   fft = id
+
