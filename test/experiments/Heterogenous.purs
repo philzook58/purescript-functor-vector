@@ -16,6 +16,11 @@ instance dottableHetMat :: (Semiring a, Semiring d, Additive b, Additive c, Dott
 data HStack a b = HStack a b
 data VStack a b = VStack a b
 
+type H2' a = HStack a a
+type V2' a = VStack a a
+type HetMat' a b c d = VStack (HStack a b) (HStack c d)
+type HetMat'' a b c d = HStack (VStack a c) (VStack b d)
+
 instance stackDot:: (Dottable a c e, Dottable b d e, Semiring e) => Dottable (HStack a b) (VStack c d) e where
    dot (HStack a b) (VStack c d) = (dot a c) + (dot b d) 
 

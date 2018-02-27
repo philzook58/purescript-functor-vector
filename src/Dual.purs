@@ -15,6 +15,9 @@ instance semiringdual :: Semiring a => Semiring (Dual f a) where
   mul (Dual x) (Dual y) = Dual $ mul <$> x <*> y
   one = Dual $ const one 
 
+
+
+
 --newtype Dual' f c a = Dual' (f a -> c)
 -- f a -> a
 -- f b

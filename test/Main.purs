@@ -16,6 +16,7 @@ import Data.Pretty
 import Text.Pretty
 import Data.Complex
 import Data.H2
+import Data.HFunctor
 
 
 
@@ -64,6 +65,8 @@ main = do
   log $ render $ pshow (dkron sigmaz sigmaz) 
   log $ render $ pshow (recip test3)
   logs $ test4 + test4
+  log $ render $ pshow $ map (const unit) $ unwrapC2' $  hmap v2diagram $ C2' (zero :: V4 Int) where unwrapC2' (C2' x) = x
+
 
 
 

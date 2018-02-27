@@ -10,8 +10,16 @@ import Control.Apply (lift2)
 class Dottable p g f | p g -> f where
   dot :: p -> g -> f
 
-instance dotttableNumber :: Dottable Number Number Number where
+instance dottableNumber :: Dottable Number Number Number where
   dot = mul
+
+-- I am concerned I am adding too many instances for dottable. Seperate into multiple typeclasses? 
+--instance scalarMultiply :: Functor f => Dottable Number (f Number) (f Number) where
+--  dot s = map (_ * s)
+
+smult :: forall f a. Functor f => Semiring a => a -> f a -> f a 
+smult s = map (_ * s)
+
 instance dottableInt :: Dottable Int Int Int where
   dot = mul
 

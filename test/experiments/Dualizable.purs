@@ -9,6 +9,8 @@ import Data.H2
 import Data.BinVec
 
 --transposable?
+-- Dottable a d c <= Dualizable a d
+-- inner :: Dual a b => a -> a ->  
 class Dualizable a d | a -> d where
    dual :: a -> d
 
@@ -21,3 +23,5 @@ instance dualizableH2 :: (Dualizable a d) => Dualizable (H2 a) (V2 d) where
 
 instance dualizableV2 :: (Dualizable a d) => Dualizable (V2 a) (H2 d) where
    dual (V2 x y) = H2 $ V2 (dual x) (dual y)
+
+
