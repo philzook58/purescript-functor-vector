@@ -6,9 +6,10 @@ import Data.Tuple (Tuple(..), curry, uncurry)
 import Data.Enum (class BoundedEnum, Cardinality, cardinality, fromEnum, toEnum)
 import Data.Int.Bits (shr)
 import Partial.Unsafe (unsafePartial)
-import Data.Maybe (fromJust)
-import Data.Array (range)
+import Data.Maybe (fromJust, Maybe)
+import Data.Array (range, fromFoldable, (!!))
 import Data.Newtype (unwrap)
+import Data.Foldable
 
 class Functor f <= Representable f a | f -> a where
    tabulate :: forall b. (a -> b) -> f b
@@ -72,9 +73,13 @@ rowmajor v h r c = c + h * r
 unrowmajor :: Int  -> Int -> Int -> (Tuple Int Int)
 unrowmajor v h i = Tuple (mod i h) (div i h) 
 
+fromArray :: forall f b a. Representable f b => BoundedEnum b => Array a -> f (Maybe a)
+fromArray xs = fillFromIndex (\m -> xs !! m)
 
+toArray :: forall f a. Foldable f => f a -> Array a 
+toArray = fromFoldable
 
-
+flatten = fromFoldable
 
 
 

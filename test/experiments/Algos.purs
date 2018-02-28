@@ -41,3 +41,14 @@ iterativeinverse p a = (geo (rp * (p - a) )) * (constant rp) where rp = recip p
 
 -- -P x_n+1 = b - (A-P)x_n
 -- This is the same thing?
+
+krylov a x0 = iterate (\x -> dot a x) x0
+powermethod = krylov
+
+
+-- mapAccumL allows me to carry along the projector as an accumulation value
+--orthogonalize = mapAccumL 
+-- but how could this possibly work with laziness?
+-- The accumulator s has to be a Lazy Projector List. I guess that is okay? maaaaaybe.
+
+-- Question: How can I write orthogonalize once such that I can use it in Arnoldi iteration?
