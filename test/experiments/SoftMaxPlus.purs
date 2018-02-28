@@ -17,3 +17,5 @@ instance ringSoftMaxPlus :: Ring SoftMaxPlus where
 
 instance divisionRingSoftMaxPlus :: DivisionRing SoftMaxPlus where
    recip (SoftMaxPlus x) = SoftMaxPlus $ negate x
+
+-- Is softmax plus irrelevant since you can just elementwise esponentiate and then use regular semiring?

@@ -66,7 +66,12 @@ main = do
   log $ render $ pshow (recip test3)
   logs $ test4 + test4
   logs $ foldl max 0 (fillRange :: V8 Int)
+  log $ render $ pshow middleone
+  log $ render $ pshow pointcharge
+  log $ render $ pshow (dot (recip mK') middleone)
+  log $ render $ pshow (dot (recip mK2) pointcharge)
   log $ render $ pshow $ map (const unit) $ unwrapC2' $  hmap v2diagram $ C2' (zero :: V4 Int) where unwrapC2' (C2' x) = x
+
 
 
 

@@ -69,21 +69,40 @@ normalize :: forall f. Dottable (f Number) (f Number) Number => Functor f => f N
 normalize x = smult (recip (norm x)) x
 
 -- does not store R.
-orthogonalize :: List (V2 Number) -> List (V2 Number)
+-- Dottable (f Number) (f Number) Number => Func 
+orthogonalize :: forall f. Dottable (f Number) (f Number) Number => Functor f => Semiring (f Number) => List (f Number) -> List (f Number)  -- List (V2 Number) -> List (V2 Number)
 orthogonalize Nil = Nil
 orthogonalize (x : xs) = u : orthogonalize xs' where
                          u = normalize x
-                         xs' = map (\v -> v - (smult (dot v u) u)) xs
+                         xs' = map (\v -> dot (Project u) v) xs
+
 
 
 -- Type classes to generate implicit matrices from vectors
 newtype Diag a = Diag a -- Diagonal of vector
 newtype Project a = Project a -- I - u uT
 
-
+-- Special Operators
 newtype Reflect a = Reflect a -- I - 2 u uT
-newtype Circulant a = Circulant a -- via the fft
+newtype Circulant a = Circulant (V2 a) -- via the fft -- circulant is either built as the top row, or as the fourier transform of that row
 newtype Toeplitz a = Toeplitz a -- The opposite diagonal filled out in a toeplitz manner
+newtype Fourier a = Fourier a -- Designates that a is in the fourier domain
+
+--instance dottablecirculant :: Dottable a b c => Dottable (Circulant a) (Circulant b) (Circulant c) where
+--   dot (Circulant x) (Circulant y) = x * y
+
+-- class (Functor f, Semiring a) <= SMult (f a)
+
+project :: forall f a. Functor f => Semiring (f a) => Ring a => Dottable (f a) (f a) a => f a -> f a -> f a 
+project x y = y + (smult (negate (dot x y)) x)
+
+diag x y = x * y
+
+instance projectDottable :: (Ring a, Semiring (f a), Functor f, Dottable (f a) (f a) a) => Dottable (Project (f a)) (f a) (f a) where
+   dot (Project x) y = project x y  -- y + (smult (negate (dot x y)) x)
+
+instance diagDottable :: (Semiring a) => Dottable (Diag a) a a where
+   dot (Diag x) y = diag x y  -- y + (smult (negate (dot x y)) x)
 
 
 
@@ -106,16 +125,47 @@ instance haarM2 :: (Haar a, Semiring a) => HaarM (M2 a) where
 
 class FFT a where
    fft :: a -> a 
-   -- or perhaps (a, a) can push up the twiddles. twiddle' = V2 twiddle (smult exp (i pi / N)  twiddle)
+-- Complex a -> Complex a
+-- -- Complex (f a) -> Complex (f a)
+-- fft :: a -> Fourier a
+-- ifft :: a -> Fourier a
+-- twiddle :: a -> a
+-- twiddle :: a
+
+-- Haar and FFT both fall under Similarity Transformations.
+-- Similarity (Fourier a) a
+
+-- Does this have any reason to be a class?
 {-
-instance fftV2 :: (FFT a, Semiring a) => FFT (V2 a) where
+class Similarity m a b where
+  to :: Dottable m a b
+  from :: Dottable m b a
+-}
+-- Lenslike Iso.
+
+
+   -- or perhaps (a, a) can push up the twiddles. twiddle' = V2 twiddle (smult exp (i pi / N)  twiddle)
+   -- with an external convenince function that dumps the twiddle.
+   -- or even a function that accepts the twiddle.
+   -- is making twiddle a convenince function bad? I feel like it might be exactly awful.
+{-
+instance fftV2 :: (FFT a, Semiring a, BoundedEnum b, Representable a b) => FFT (V2 (f a)) where
    fft (V2 a b) = V2 (a' + twiddle * b') (a' - twiddle * b') where
                                                             a' = fft a
                                                             b' = fft b
-                                                            twiddle :: a
-                                                          twiddle = fillRange 
--}
+                                                            Cardinality n = cardinality :: Cardinality b 
+                                                            twiddle :: (f a)
+                                                            twiddle = map (\m -> cexp (i * 3.1459 *  m  / n ) fillRange 
 
+
+   twiddle = (V2 (smult a twiddle) (smult (negate a) twiddle)) where a = cexp (i * cpi / (2 * n))
+class Twiddle where
+   twiddle
+-}
 instance fftComplex :: FFT (Complex Number) where
    fft = id
-
+{-
+instance fftComplex :: FFT (Complex Number) where
+   fft x = (Tuple x 1.0)
+   twiddle = 1.0
+-}

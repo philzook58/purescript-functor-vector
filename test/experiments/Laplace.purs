@@ -5,6 +5,9 @@ import Data.BinMat
 import Data.Functor.Representable
 import Data.DivisionRing
 import Data.Complex
+import Data.DenseKron
+import Data.BinVec
+import Data.Pretty
 --import Data.Proxy
 
 -- little endian K matrix. Maybe
@@ -46,7 +49,34 @@ bD' _ _ = 0.0
 bD :: M4 Number
 bD = fillFromZIndex bD'
 
+-- 2d laplace matrix on sqaure grid
+mK2 = dkron mK' mK'
 
+
+middleone :: V8 Number
+middleone = fillFromIndex f where f i = if i == 4 then 1.0 else 0.0
+
+--pointcharge :: DKron (C3 V2) (C3 V2) Number
+-- we need to put newtypes around Vs.
+
+pointcharge = dkron middleone middleone
+
+
+
+--iterated filling
+
+-- this method retraverses the tree
+--testD3 = (map <<< map) fillFromIndex $ map fillFromIndex $ (fillFromIndex f) :: V8 Number where f i j k = 0.0
+-- this is more CPS-like
+testD3 ::  DKron V2 (DKron V2 V2) Number
+testD3 = DKron $ fillFromIndex \i -> DKron $ fillFromIndex \j -> fillFromIndex \k -> f i j k where f i j k = 0.0
+
+-- may want to demarcate DKron as different
+-- with a tag
+newtype Dim a = Dim a
+
+testMD2 ::  DKron M2 M2 Number
+testMD2 = DKron $ fillFromZIndex \i j -> fillFromZIndex \k l -> f i j k l where f i j k l = 0.0
 
 -- Class Dualizable a b where
 -- instance Dualiazble a b => Dualizable (Complex a) (Complex b)

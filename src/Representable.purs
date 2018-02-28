@@ -40,6 +40,14 @@ basis = unsafePartial $ map (fromJust <<< toEnum) (range 0 $ unwrap (cardinality
 fillFromZIndex :: forall a f b. BoundedEnum a => Representable f a => (Int -> Int -> b) -> f b  
 fillFromZIndex f = tabulate (uncurry f <<< unzorder <<< fromEnum)
 
+
+fillFromRowMajorIndex :: forall a f b. BoundedEnum a => Representable f a => Int -> (Int -> Int -> b) -> f b  
+fillFromRowMajorIndex vh f = tabulate (uncurry f <<< unrowmajor vh vh <<< fromEnum)
+
+fillFromColMajorIndex :: forall a f b. BoundedEnum a => Representable f a => Int -> (Int -> Int -> b) -> f b  
+fillFromColMajorIndex vh f = tabulate (uncurry f <<< uncolmajor vh vh <<< fromEnum)
+
+
 zorder :: Int -> Int -> Int
 zorder x y | x == 0 && y == 0 = 0 
 zorder x y  = (mod x 2) + 2 * (mod y 2) + 4 * (zorder (shr x 1) (shr y 1))
@@ -50,4 +58,23 @@ unzorder z = Tuple x y where
 		                   Tuple x' y' = unzorder (shr z 2)
 		                   x = (mod z 2) + x' * 2
 		                   y = (mod (shr z 1) 2) + y' * 2
+
+colmajor :: Int -> Int -> Int -> Int -> Int
+colmajor v h r c = r + v * c 
+
+uncolmajor :: Int  -> Int -> Int -> (Tuple Int Int)
+uncolmajor v h i = Tuple (mod i v) (div i v) 
+
+
+rowmajor :: Int -> Int -> Int -> Int -> Int
+rowmajor v h r c = c + h * r 
+
+unrowmajor :: Int  -> Int -> Int -> (Tuple Int Int)
+unrowmajor v h i = Tuple (mod i h) (div i h) 
+
+
+
+
+
+
 
