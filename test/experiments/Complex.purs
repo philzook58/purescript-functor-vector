@@ -5,7 +5,7 @@ import Data.DivisionRing
 import Math
 
 data Complex a = Complex a a
-
+-- this is asking for trouble. i1 maybe?
 i = Complex zero one
 neg1 = negate one
 
@@ -36,6 +36,8 @@ mag2 (Complex r i) = r * r + i * i
 
 conj (Complex r i) = Complex r (negate i)
 
+-- Complex numbers can be thought of as a compressed representation of matrices of a particular form.
+-- same goes for quaternions and some other special guys
 instance functorComplex :: Functor Complex where
   map f (Complex x y) = Complex (f x) (f y)
 

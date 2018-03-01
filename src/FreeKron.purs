@@ -23,3 +23,5 @@ instance dottableFKron :: (Dottable (f a) (f' b) (f'' c), Dottable (g a) (g' b) 
 fkron x y = FKron $ pure $ DSum x y
 
 -- densify :: FKron f g a -> DKron f g a
+
+

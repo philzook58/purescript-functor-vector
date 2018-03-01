@@ -2,14 +2,18 @@ module Algos where
 
 import Prelude
 import Data.Taylor
-import Data.List.Lazy (iterate)
+import Data.List.Lazy (iterate, List)
 
 
 -- geometric series for 1 / (1-x)
 -- basically the main thing.
 -- Should go into the Taylor package itself.
-geo :: forall a. Semiring a => a -> Taylor a
-geo x = Taylor $ iterate (mul x) one
+
+-- Am I getting anything out of Taylor?
+-- 
+
+geo :: forall a. Semiring a => a -> List a
+geo x = iterate (mul x) one
 
 
 -- AA^-1 = I
@@ -52,3 +56,14 @@ powermethod = krylov
 -- The accumulator s has to be a Lazy Projector List. I guess that is okay? maaaaaybe.
 
 -- Question: How can I write orthogonalize once such that I can use it in Arnoldi iteration?
+
+-- One possiblity - CoRoutines or other streaming libraries.
+-- A Transformer that holds the current projector in a state monad.
+-- I feel that such a thing is a touch unsatisfying.
+
+
+-- We may want a slice tree as a type.
+-- scalar multiply via Tensor 1 
+
+
+

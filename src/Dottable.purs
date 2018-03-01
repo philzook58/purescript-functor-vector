@@ -23,6 +23,13 @@ smult s = map (_ * s)
 instance dottableInt :: Dottable Int Int Int where
   dot = mul
 
+-- one could insist that it is a metric of  Semiring a => f a -> f a -> a
+-- complex conjugation fits in this class, since complex is a functor itself. This is what Kmett did.  
+-- I do think the conflation of the inner product with the matrix product is a mistake. They are very different.
+-- is conflating the matrix matrix product with the matrix vector product also bad?
+class Metric a b where
+  inner :: a -> a -> b
+
 {- This may preclude custom instances
 instance dottableSemiring :: Semiring a => Dottable a a a where
   dot = mul

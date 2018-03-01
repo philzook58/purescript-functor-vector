@@ -77,10 +77,27 @@ orthogonalize (x : xs) = u : orthogonalize xs' where
                          xs' = map (\v -> dot (Project u) v) xs
 
 
+newtype SubSpace v= SubSpace (Array v) -- subspace consisting of the span of 
+newtype ProjectOp v = ProjectOp (Array (Project v)) | Complement (Array (Project v))
+
+-- projectsubspace :: SubSpace v -> ProjectOp v
+
+projectioncomplement :: ProjectOp v -> ProjectOp v
+projectioncomplement (ProjectOp x) = Complement x
+
+
+newtype UnitV a = UnitV a -- hide constructor
+-- normalize :: forall f. Dottable (f Number) (f Number) Number => Functor f => f Number -> UnitV (f Number)
+-- can extract from
+forgetNormed (UnitV a) = a
+
 
 -- Type classes to generate implicit matrices from vectors
 newtype Diag a = Diag a -- Diagonal of vector
 newtype Project a = Project a -- I - u uT
+-- requires unit
+--newtype Project a = Project (UnitV a)
+
 
 -- Special Operators
 newtype Reflect a = Reflect a -- I - 2 u uT

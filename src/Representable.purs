@@ -79,7 +79,7 @@ fromArray xs = fillFromIndex (\m -> xs !! m)
 toArray :: forall f a. Foldable f => f a -> Array a 
 toArray = fromFoldable
 
-flatten = fromFoldable
+flatten = toArray
 
 
 
