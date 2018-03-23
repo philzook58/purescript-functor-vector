@@ -23,11 +23,26 @@ type V2' a = VStack a a
 type HetMat' a b c d = VStack (HStack a b) (HStack c d)
 type HetMat'' a b c d = HStack (VStack a c) (VStack b d)
 
-instance stackDot:: (Dottable a c e, Dottable b d e, Semiring e) => Dottable (HStack a b) (VStack c d) e where
-   dot (HStack a b) (VStack c d) = (dot a c) + (dot b d) 
+instance additiveVStack :: (Additive a, Additive b) => Additive (VStack a b) where
+   add' (VStack a b) (VStack c d) = VStack (add' a c) (add' b d)
+   zero' = VStack zero' zero'
+
+instance additiveHStack :: (Additive a, Additive b) => Additive (HStack a b) where
+   add' (HStack a b) (HStack c d) = HStack (add' a c) (add' b d)
+   zero' = HStack zero' zero'
+
+
+instance stackDot :: (Dottable a c e, Dottable b d e, Additive e) => Dottable (HStack a b) (VStack c d) e where
+   dot (HStack a b) (VStack c d) = add' (dot a c) (dot b d) 
 
 instance stackDot2 :: (Dottable a c e, Dottable a d f, Dottable b c g, Dottable b d h) => Dottable (VStack a b) (HStack c d) (HetMat e f g h) where
    dot (VStack a b) (HStack c d) = HetMat (dot a c) (dot a d) (dot b c) (dot b d) 
+
+instance stackDot3 :: (Dottable a b d, Dottable a c e) => Dottable a (HStack b c) (HStack d e) where
+   dot a (HStack b c) = HStack (dot a b) (dot a c) 
+
+instance stackDot4 :: (Dottable a c d, Dottable b c e) => Dottable (VStack a b) c (VStack d e) where
+   dot (VStack a b) c = VStack (dot a c) (dot b c) 
 
 
 -- is stacking taken care of by
